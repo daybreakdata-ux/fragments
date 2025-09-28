@@ -237,13 +237,13 @@ export default function Home() {
     setLanguageModel({ ...languageModel, ...e })
   }
 
-  function handleSocialClick(target: 'github' | 'x' | 'discord') {
-    if (target === 'github') {
-      window.open('https://github.com/e2b-dev/fragments', '_blank')
-    } else if (target === 'x') {
-      window.open('https://x.com/e2b', '_blank')
-    } else if (target === 'discord') {
-      window.open('https://discord.gg/e2b', '_blank')
+  function handleSocialClick(target: 'Daybreak' | 'Facebook' | 'Indigo') {
+    if (target === 'Daybreak') {
+      window.open('https://daybreakdev.com', '_blank')
+    } else if (target === 'Facebook') {
+      window.open('https://facebook.com', '_blank')
+    } else if (target === 'Indigo') {
+      window.open('https://indigo.daybreakdev.com', '_blank')
     }
 
     posthog.capture(`${target}_click`)
