@@ -24,6 +24,7 @@ import { useLocalStorage } from 'usehooks-ts'
 
 export default function Home() {
   const [chatInput, setChatInput] = useLocalStorage('chat', '')
+  const [showSplash, setShowSplash] = useState(true)
   const [files, setFiles] = useState<File[]>([])
   const [selectedTemplate, setSelectedTemplate] = useState<'auto' | TemplateId>(
     'auto',
@@ -145,6 +146,11 @@ export default function Home() {
     if (error) stop()
   }, [error])
 
+  useEffect(() => {
+    const timer = setTimeout(() => setShowSplash(false), 5000)
+    return () => clearTimeout(timer)
+  }, [])
+
   function setMessage(message: Partial<Message>, index?: number) {
     setMessages((previousMessages) => {
       const updatedMessages = [...previousMessages]
@@ -263,18 +269,23 @@ export default function Home() {
   }
 
   return (
-    <main 
-      className="flex min-h-screen max-h-screen relative"
-      style={{
-        backgroundImage: 'url(/thirdparty/logos/8010DDFC-20CC-4D1F-BDC4-AE0DBE33286C.JPG)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
-      }}
-    >
-      {/* Background overlay with 60% opacity */}
-      <div className="absolute inset-0 bg-black/40 z-0"></div>
-      
+    <main className="flex min-h-screen max-h-screen relative bg-muted">
+      {/* Splash screen overlay - shows for 5s on initial load */}
+      {showSplash && (
+        <div
+          className="fixed inset-0 z-50"
+          style={{
+            backgroundImage:
+              'url(/thirdparty/logos/8010DDFC-20CC-4D1F-BDC4-AE0DBE33286C.JPG)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        >
+          <div className="absolute inset-0 bg-black/40" />
+        </div>
+      )}
+
       {supabase && (
         <AuthDialog
           open={isAuthDialogOpen}
