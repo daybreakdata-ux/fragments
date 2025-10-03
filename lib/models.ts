@@ -69,6 +69,11 @@ export function getModelClient(model: LLMModel, config: LLMModelConfig) {
         apiKey: apiKey || process.env.DEEPSEEK_API_KEY,
         baseURL: baseURL || 'https://api.deepseek.com/v1',
       })(modelNameString),
+    openrouter: () =>
+      createOpenAI({
+        apiKey: apiKey || process.env.OPENROUTER_API_KEY || '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',
+        baseURL: baseURL || 'https://openrouter.ai/api/v1',
+      })(modelNameString),
   }
 
   const createClient =
