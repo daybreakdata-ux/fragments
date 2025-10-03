@@ -274,79 +274,78 @@ export default function Home() {
     return () => clearTimeout(timer)
   }, [])
 
+  return (
     <>
       {showSplash && <SplashScreen />}
       <main className="flex min-h-screen max-h-screen">
         {supabase && (
-        <AuthDialog
-          open={isAuthDialogOpen}
-          setOpen={setAuthDialog}
-          view={authView}
-          supabase={supabase}
-        />
-      )}
-      <div className="grid w-full md:grid-cols-2 relative z-10">
-        <div
-          className={`flex flex-col w-full max-h-full max-w-[800px] mx-auto px-4 overflow-auto ${fragment ? 'col-span-1' : 'col-span-2'}`}
-        >
-          <NavBar
-            session={session}
-            showLogin={() => setAuthDialog(true)}
-            signOut={logout}
-            onClear={handleClearChat}
-            canClear={messages.length > 0}
-            canUndo={messages.length > 1 && !isLoading}
-            onUndo={handleUndo}
+          <AuthDialog
+            open={isAuthDialogOpen}
+            setOpen={setAuthDialog}
+            view={authView}
+            supabase={supabase}
           />
-          <Chat
-            messages={messages}
-            isLoading={isLoading}
-            setCurrentPreview={setCurrentPreview}
+        )}
+        <div className="grid w-full md:grid-cols-2 relative z-10">
+          <div className={`flex flex-col w-full max-h-full max-w-[800px] mx-auto px-4 overflow-auto ${fragment ? 'col-span-1' : 'col-span-2'}`}> 
+            <NavBar
+              session={session}
+              showLogin={() => setAuthDialog(true)}
+              signOut={logout}
+              onClear={handleClearChat}
+              canClear={messages.length > 0}
+              canUndo={messages.length > 1 && !isLoading}
+              onUndo={handleUndo}
+            />
+            <Chat
+              messages={messages}
+              isLoading={isLoading}
+              setCurrentPreview={setCurrentPreview}
+            />
+            <ChatInput
+              retry={retry}
+              isErrored={error !== undefined}
+              errorMessage={errorMessage}
+              isLoading={isLoading}
+              isRateLimited={isRateLimited}
+              stop={stop}
+              input={chatInput}
+              handleInputChange={handleSaveInputChange}
+              handleSubmit={handleSubmitAuth}
+              isMultiModal={currentModel?.multiModal || false}
+              files={files}
+              handleFileChange={handleFileChange}
+            >
+              <ChatPicker
+                templates={templates}
+                selectedTemplate={selectedTemplate}
+                onSelectedTemplateChange={setSelectedTemplate}
+                models={filteredModels}
+                languageModel={languageModel}
+                onLanguageModelChange={handleLanguageModelChange}
+              />
+              <ChatSettings
+                languageModel={languageModel}
+                onLanguageModelChange={handleLanguageModelChange}
+                apiKeyConfigurable={!process.env.NEXT_PUBLIC_NO_API_KEY_INPUT}
+                baseURLConfigurable={!process.env.NEXT_PUBLIC_NO_BASE_URL_INPUT}
+                useMorphApply={useMorphApply}
+                onUseMorphApplyChange={setUseMorphApply}
+              />
+            </ChatInput>
+          </div>
+          <Preview
+            teamID={userTeam?.id}
+            accessToken={session?.access_token}
+            selectedTab={currentTab}
+            onSelectedTabChange={setCurrentTab}
+            isChatLoading={isLoading}
+            isPreviewLoading={isPreviewLoading}
+            fragment={fragment}
+            result={result as ExecutionResult}
+            onClose={() => setFragment(undefined)}
           />
-          <ChatInput
-            retry={retry}
-            isErrored={error !== undefined}
-            errorMessage={errorMessage}
-            isLoading={isLoading}
-            isRateLimited={isRateLimited}
-            stop={stop}
-            input={chatInput}
-            handleInputChange={handleSaveInputChange}
-            handleSubmit={handleSubmitAuth}
-            isMultiModal={currentModel?.multiModal || false}
-            files={files}
-            handleFileChange={handleFileChange}
-          >
-            <ChatPicker
-              templates={templates}
-              selectedTemplate={selectedTemplate}
-              onSelectedTemplateChange={setSelectedTemplate}
-              models={filteredModels}
-              languageModel={languageModel}
-              onLanguageModelChange={handleLanguageModelChange}
-            />
-            <ChatSettings
-              languageModel={languageModel}
-              onLanguageModelChange={handleLanguageModelChange}
-              apiKeyConfigurable={!process.env.NEXT_PUBLIC_NO_API_KEY_INPUT}
-              baseURLConfigurable={!process.env.NEXT_PUBLIC_NO_BASE_URL_INPUT}
-              useMorphApply={useMorphApply}
-              onUseMorphApplyChange={setUseMorphApply}
-            />
-          </ChatInput>
         </div>
-        <Preview
-          teamID={userTeam?.id}
-          accessToken={session?.access_token}
-          selectedTab={currentTab}
-          onSelectedTabChange={setCurrentTab}
-          isChatLoading={isLoading}
-          isPreviewLoading={isPreviewLoading}
-          fragment={fragment}
-          result={result as ExecutionResult}
-          onClose={() => setFragment(undefined)}
-        />
-      </div>
       </main>
     </>
   )
