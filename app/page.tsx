@@ -263,7 +263,18 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen max-h-screen">
+    <main 
+      className="flex min-h-screen max-h-screen relative"
+      style={{
+        backgroundImage: 'url(/thirdparty/logos/8010DDFC-20CC-4D1F-BDC4-AE0DBE33286C.JPG)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      {/* Background overlay with 60% opacity */}
+      <div className="absolute inset-0 bg-black/40 z-0"></div>
+      
       {supabase && (
         <AuthDialog
           open={isAuthDialogOpen}
@@ -272,7 +283,7 @@ export default function Home() {
           supabase={supabase}
         />
       )}
-      <div className="grid w-full md:grid-cols-2">
+      <div className="grid w-full md:grid-cols-2 relative z-10">
         <div
           className={`flex flex-col w-full max-h-full max-w-[800px] mx-auto px-4 overflow-auto ${fragment ? 'col-span-1' : 'col-span-2'}`}
         >
