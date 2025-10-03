@@ -6,7 +6,6 @@ import { Chat } from '@/components/chat'
 import { ChatInput } from '@/components/chat-input'
 import { ChatPicker } from '@/components/chat-picker'
 import { ChatSettings } from '@/components/chat-settings'
-import { NavBar } from '@/components/navbar'
 import { Preview } from '@/components/preview'
 import SplashScreen from '@/components/splash-screen'
 import { useAuth } from '@/lib/auth'
@@ -14,12 +13,10 @@ import { Message, toAISDKMessages, toMessageImage } from '@/lib/messages'
 import { LLMModelConfig } from '@/lib/models'
 import modelsList from '@/lib/models.json'
 import { FragmentSchema, fragmentSchema as schema } from '@/lib/schema'
-import { supabase } from '@/lib/supabase'
 import templates, { TemplateId } from '@/lib/templates'
 import { ExecutionResult } from '@/lib/types'
 import { DeepPartial } from 'ai'
 import { experimental_useObject as useObject } from '@ai-sdk/react'
-import { usePostHog } from 'posthog-js/react'
 import { SetStateAction, useEffect, useState } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 
@@ -49,11 +46,8 @@ export default function Home() {
   const [isRateLimited, setIsRateLimited] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const { session, userTeam } = useAuth(setAuthDialog, setAuthView)
-  const [useMorphApply, setUseMorphApply] = useLocalStorage(
-    'useMorphApply',
     process.env.NEXT_PUBLIC_USE_MORPH_APPLY === 'true',
   )
-
   const filteredModels = modelsList.models.filter((model) => {
     if (process.env.NEXT_PUBLIC_HIDE_LOCAL_MODELS) {
       return model.providerId !== 'ollama'
@@ -104,9 +98,7 @@ export default function Home() {
             accessToken: session?.access_token,
           }),
         })
-
-        const result = await response.json()
-        console.log('result', result)
+            // userID, teamID removed
         posthog.capture('sandbox_created', { url: result.url })
 
         setResult(result)
@@ -172,9 +164,6 @@ export default function Home() {
     }
 
     if (isLoading) {
-      stop()
-    }
-
     const content: Message['content'] = [{ type: 'text', text: chatInput }]
     const images = await toMessageImage(files)
 
@@ -195,8 +184,7 @@ export default function Home() {
       messages: toAISDKMessages(updatedMessages),
       template: currentTemplate,
       model: currentModel,
-      config: languageModel,
-      ...(shouldUseMorph && fragment ? { currentFragment: fragment } : {}),
+      // userID, teamID removed
     })
 
     setChatInput('')
@@ -216,8 +204,7 @@ export default function Home() {
       messages: toAISDKMessages(messages),
       template: currentTemplate,
       model: currentModel,
-      config: languageModel,
-      ...(shouldUseMorph && fragment ? { currentFragment: fragment } : {}),
+      // userID, teamID removed
     })
   }
 
@@ -239,11 +226,7 @@ export default function Home() {
       ? supabase.auth.signOut()
       : console.warn('Supabase is not initialized')
   }
-
-  function handleLanguageModelChange(e: LLMModelConfig) {
-    setLanguageModel({ ...languageModel, ...e })
-  }
-
+  // Removed logout function
 
   function handleClearChat() {
     stop()
@@ -282,19 +265,12 @@ export default function Home() {
         {typeof supabase !== 'undefined' && (
           <AuthDialog
             open={isAuthDialogOpen}
-            setOpen={setAuthDialog}
-            view={authView}
-            supabase={supabase}
-          />
-        )}
-        <div className="grid w-full md:grid-cols-2 relative z-10">
-          <div className={`flex flex-col w-full max-h-full max-w-[800px] mx-auto px-4 overflow-auto ${fragment ? 'col-span-1' : 'col-span-2'}`}> 
-            <NavBar
+        {/* AuthDialog removed */}
               session={session}
               showLogin={() => setAuthDialog(true)}
               signOut={logout}
               onClear={handleClearChat}
-              canClear={messages.length > 0}
+              // showLogin removed
               canUndo={messages.length > 1 && !isLoading}
               onUndo={handleUndo}
             />
@@ -339,8 +315,7 @@ export default function Home() {
             teamID={userTeam?.id}
             accessToken={session?.access_token}
             selectedTab={currentTab}
-            onSelectedTabChange={setCurrentTab}
-            isChatLoading={isLoading}
+            // teamID and accessToken removed
             isPreviewLoading={isPreviewLoading}
             fragment={fragment}
             result={result as ExecutionResult}

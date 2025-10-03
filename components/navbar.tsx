@@ -16,22 +16,20 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { Session } from '@supabase/supabase-js'
 import { ArrowRight, LogOut, Trash, Undo } from 'lucide-react'
 import Link from 'next/link'
 
-export function NavBar({
-  session,
-  showLogin,
-  signOut,
+  // session,
+  // showLogin,
+  // signOut,
   onClear,
   canClear,
   onUndo,
   canUndo,
 }: {
-  session: Session | null
-  showLogin: () => void
-  signOut: () => void
+  // session: Session | null
+  // showLogin: () => void
+  // signOut: () => void
   onClear: () => void
   canClear: boolean
   onUndo: () => void
@@ -43,36 +41,7 @@ export function NavBar({
         <Link href="/" className="flex items-center gap-2" target="_blank">
           <Logo width={24} height={24} />
           <h1 className="whitespace-pre">KODE v.0</h1>
-        </Link>
-      </div>
-      <div className="flex items-center gap-1 md:gap-4">
-        <TooltipProvider>
-          <Tooltip delayDuration={0}>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={onUndo}
-                disabled={!canUndo}
-              >
-                <Undo className="h-4 w-4 md:h-5 md:w-5" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Undo</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider>
-          <Tooltip delayDuration={0}>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={onClear}
-                disabled={!canClear}
-              >
-                <Trash className="h-4 w-4 md:h-5 md:w-5" />
-              </Button>
-            </TooltipTrigger>
+        {/* Auth UI removed */}
             <TooltipContent>Clear chat</TooltipContent>
           </Tooltip>
         </TooltipProvider>
