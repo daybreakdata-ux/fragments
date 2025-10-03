@@ -275,10 +275,11 @@ export default function Home() {
   }, [])
 
   return (
+  return (
     <>
       {showSplash && <SplashScreen />}
       <main className="flex min-h-screen max-h-screen">
-        {supabase && (
+        {typeof supabase !== 'undefined' && (
           <AuthDialog
             open={isAuthDialogOpen}
             setOpen={setAuthDialog}
