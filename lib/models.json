@@ -302,6 +302,13 @@
       "multiModal": false
     },
     {
+      "id": "openai/gpt-oss-20b:free",
+      "provider": "OpenRouter",
+      "providerId": "openrouter",
+      "name": "GPT OSS 20B (Free)",
+      "multiModal": false
+    },
+    {
       "id": "moonshotai/kimi-k2-instruct",
       "provider": "Groq",
       "providerId": "groq",

@@ -18,7 +18,7 @@ import { supabase } from '@/lib/supabase'
 import templates, { TemplateId } from '@/lib/templates'
 import { ExecutionResult } from '@/lib/types'
 import { DeepPartial } from 'ai'
-import { experimental_useObject as useObject } from 'ai/react'
+import { experimental_useObject as useObject } from '@ai-sdk/react'
 import { usePostHog } from 'posthog-js/react'
 import { SetStateAction, useEffect, useState } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
@@ -33,7 +33,7 @@ export default function Home() {
   const [languageModel, setLanguageModel] = useLocalStorage<LLMModelConfig>(
     'languageModel',
     {
-      model: 'GPT-4o',
+      model: 'openai/gpt-oss-20b:free',
     },
   )
 
@@ -147,6 +147,11 @@ export default function Home() {
     if (error) stop()
   }, [error])
 
+  useEffect(() => {
+    const timer = setTimeout(() => setShowSplash(false), 5000)
+    return () => clearTimeout(timer)
+  }, [])
+
   function setMessage(message: Partial<Message>, index?: number) {
     setMessages((previousMessages) => {
       const updatedMessages = [...previousMessages]
@@ -239,17 +244,6 @@ export default function Home() {
     setLanguageModel({ ...languageModel, ...e })
   }
 
-  function handleSocialClick(target: 'github' | 'x' | 'discord') {
-    if (target === 'github') {
-  window.open('https://github.com/e2b-dev/KODEai', '_blank')
-    } else if (target === 'x') {
-      window.open('https://x.com/e2b', '_blank')
-    } else if (target === 'discord') {
-      window.open('https://discord.gg/e2b', '_blank')
-    }
-
-    posthog.capture(`${target}_click`)
-  }
 
   function handleClearChat() {
     stop()
@@ -280,11 +274,10 @@ export default function Home() {
     return () => clearTimeout(timer)
   }, [])
 
-  return (
     <>
       {showSplash && <SplashScreen />}
       <main className="flex min-h-screen max-h-screen">
-      {supabase && (
+        {supabase && (
         <AuthDialog
           open={isAuthDialogOpen}
           setOpen={setAuthDialog}
@@ -292,7 +285,7 @@ export default function Home() {
           supabase={supabase}
         />
       )}
-      <div className="grid w-full md:grid-cols-2">
+      <div className="grid w-full md:grid-cols-2 relative z-10">
         <div
           className={`flex flex-col w-full max-h-full max-w-[800px] mx-auto px-4 overflow-auto ${fragment ? 'col-span-1' : 'col-span-2'}`}
         >
@@ -300,7 +293,6 @@ export default function Home() {
             session={session}
             showLogin={() => setAuthDialog(true)}
             signOut={logout}
-            onSocialClick={handleSocialClick}
             onClear={handleClearChat}
             canClear={messages.length > 0}
             canUndo={messages.length > 1 && !isLoading}
@@ -355,7 +347,7 @@ export default function Home() {
           onClose={() => setFragment(undefined)}
         />
       </div>
-    </main>
+      </main>
     </>
   )
 }

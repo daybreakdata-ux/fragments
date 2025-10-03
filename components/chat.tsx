@@ -27,7 +27,7 @@ export function Chat({
   return (
     <div
       id="chat-container"
-      className="flex flex-col pb-12 gap-2 overflow-y-auto max-h-full"
+      className="flex flex-col pb-12 gap-2 overflow-y-auto max-h-full bg-black/90 rounded-lg p-4"
     >
       {messages.map((message: Message, index: number) => (
         <div

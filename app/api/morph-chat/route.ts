@@ -65,7 +65,7 @@ ${currentFragment.code}
 `
 
     const result = await generateObject({
-      model: modelClient as LanguageModel,
+      model: modelClient as unknown as LanguageModel,
       system: contextualSystemPrompt,
       messages,
       schema: morphEditSchema,

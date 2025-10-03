@@ -1,6 +1,5 @@
 'use client'
 
-import { RepoBanner } from './repo-banner'
 import { Button } from '@/components/ui/button'
 import {
   Tooltip,
@@ -147,7 +146,7 @@ export function ChatInput({
     <form
       onSubmit={handleSubmit}
       onKeyDown={onEnter}
-      className="mb-2 mt-auto flex flex-col bg-background"
+      className="mb-2 mt-auto flex flex-col bg-black/90 rounded-lg p-4"
       onDragEnter={isMultiModal ? handleDrag : undefined}
       onDragLeave={isMultiModal ? handleDrag : undefined}
       onDragOver={isMultiModal ? handleDrag : undefined}
@@ -173,7 +172,6 @@ export function ChatInput({
         </div>
       )}
       <div className="relative">
-        <RepoBanner className="absolute bottom-full inset-x-2 translate-y-1 z-0 pb-2" />
         <div
           className={`shadow-md rounded-2xl relative z-10 bg-background border ${
             dragActive
@@ -270,10 +268,7 @@ export function ChatInput({
         </div>
       </div>
       <p className="text-xs text-muted-foreground mt-2 text-center">
-        KODEai is an open-source project made by{' '}
-        <a href="https://e2b.dev" target="_blank" className="text-[#ff8800]">
-          ✶ E2B
-        </a>
+  KODE v.0 is an open-source project
       </p>
     </form>
   )

@@ -30,7 +30,7 @@ export async function applyPatch({
 
   try {
     const { text: mergedCode } = await generateText({
-      model: openai('morph-v3-large') as LanguageModel,
+      model: openai('morph-v3-large') as unknown as LanguageModel,
       prompt: `<instruction>${instructions}</instruction>\n<code>${initialCode}</code>\n<update>${codeEdit}</update>`,
     })
 
