@@ -56,7 +56,7 @@ export async function POST(req: Request) {
 
   try {
     const stream = await streamObject({
-      model: modelClient as LanguageModel,
+      model: modelClient as unknown as LanguageModel,
       schema,
       system: toPrompt(template),
       messages,
