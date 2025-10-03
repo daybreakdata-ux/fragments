@@ -8,6 +8,7 @@ import { ChatPicker } from '@/components/chat-picker'
 import { ChatSettings } from '@/components/chat-settings'
 import { NavBar } from '@/components/navbar'
 import { Preview } from '@/components/preview'
+import SplashScreen from '@/components/splash-screen'
 import { useAuth } from '@/lib/auth'
 import { Message, toAISDKMessages, toMessageImage } from '@/lib/messages'
 import { LLMModelConfig } from '@/lib/models'
@@ -23,6 +24,7 @@ import { SetStateAction, useEffect, useState } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 
 export default function Home() {
+  const [showSplash, setShowSplash] = useState(true)
   const [chatInput, setChatInput] = useLocalStorage('chat', '')
   const [files, setFiles] = useState<File[]>([])
   const [selectedTemplate, setSelectedTemplate] = useState<'auto' | TemplateId>(
@@ -31,7 +33,7 @@ export default function Home() {
   const [languageModel, setLanguageModel] = useLocalStorage<LLMModelConfig>(
     'languageModel',
     {
-      model: 'claude-3-5-sonnet-latest',
+      model: 'GPT-4o',
     },
   )
 
@@ -239,7 +241,7 @@ export default function Home() {
 
   function handleSocialClick(target: 'github' | 'x' | 'discord') {
     if (target === 'github') {
-      window.open('https://github.com/e2b-dev/fragments', '_blank')
+  window.open('https://github.com/e2b-dev/KODEai', '_blank')
     } else if (target === 'x') {
       window.open('https://x.com/e2b', '_blank')
     } else if (target === 'discord') {
@@ -273,8 +275,15 @@ export default function Home() {
     setCurrentPreview({ fragment: undefined, result: undefined })
   }
 
+  useEffect(() => {
+    const timer = setTimeout(() => setShowSplash(false), 5000)
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
-    <main className="flex min-h-screen max-h-screen">
+    <>
+      {showSplash && <SplashScreen />}
+      <main className="flex min-h-screen max-h-screen">
       {supabase && (
         <AuthDialog
           open={isAuthDialogOpen}
@@ -347,5 +356,6 @@ export default function Home() {
         />
       </div>
     </main>
+    </>
   )
 }
