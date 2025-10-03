@@ -17,7 +17,7 @@ import { supabase } from '@/lib/supabase'
 import templates, { TemplateId } from '@/lib/templates'
 import { ExecutionResult } from '@/lib/types'
 import { DeepPartial } from 'ai'
-import { experimental_useObject as useObject } from 'ai/react'
+import { experimental_useObject as useObject } from '@ai-sdk/react'
 import { usePostHog } from 'posthog-js/react'
 import { SetStateAction, useEffect, useState } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
@@ -237,13 +237,13 @@ export default function Home() {
     setLanguageModel({ ...languageModel, ...e })
   }
 
-  function handleSocialClick(target: 'Daybreak' | 'Facebook' | 'Indigo') {
-    if (target === 'Daybreak') {
-      window.open('https://daybreakdev.com', '_blank')
-    } else if (target === 'Facebook') {
-      window.open('https://facebook.com', '_blank')
-    } else if (target === 'Indigo') {
-      window.open('https://indigo.daybreakdev.com', '_blank')
+  function handleSocialClick(target: 'github' | 'x' | 'discord') {
+    if (target === 'github') {
+      window.open('https://github.com/daybreakdata-ux/fragments', '_blank')
+    } else if (target === 'x') {
+      window.open('https://x.com/daybreakdev', '_blank')
+    } else if (target === 'discord') {
+      window.open('https://discord.gg/daybreakdev', '_blank')
     }
 
     posthog.capture(`${target}_click`)
