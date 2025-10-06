@@ -46,8 +46,11 @@ export default function Home() {
   const [isRateLimited, setIsRateLimited] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const { session, userTeam } = useAuth(setAuthDialog, setAuthView)
+  const [useMorphApply, setUseMorphApply] = useLocalStorage(
+    'useMorphApply',
     process.env.NEXT_PUBLIC_USE_MORPH_APPLY === 'true',
   )
+
   const filteredModels = modelsList.models.filter((model) => {
     if (process.env.NEXT_PUBLIC_HIDE_LOCAL_MODELS) {
       return model.providerId !== 'ollama'
@@ -98,7 +101,9 @@ export default function Home() {
             accessToken: session?.access_token,
           }),
         })
-            // userID, teamID removed
+
+        const result = await response.json()
+        console.log('result', result)
         posthog.capture('sandbox_created', { url: result.url })
 
         setResult(result)
@@ -252,12 +257,15 @@ export default function Home() {
     setCurrentPreview({ fragment: undefined, result: undefined })
   }
 
+  function handleLanguageModelChange(e: LLMModelConfig) {
+    setLanguageModel({ ...languageModel, ...e })
+  }
+
   useEffect(() => {
     const timer = setTimeout(() => setShowSplash(false), 5000)
     return () => clearTimeout(timer)
   }, [])
 
-  return (
   return (
     <>
       {showSplash && <SplashScreen />}
